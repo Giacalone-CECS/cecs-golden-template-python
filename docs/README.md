@@ -11,6 +11,7 @@ the surrounding system.
 | **[Getting started](getting-started.md)** | Never set up an autograder. Zero to a verified, working assignment. | ~45 min first time |
 | **[Writing tests](writing-tests.md)** | Expressing "is this correct?" as a `tests` block. Test types, weighting, traps. | ~15 min |
 | **[Troubleshooting](troubleshooting.md)** | Something is broken. Symptom → diagnosis → fix. | as needed |
+| **[Governance](governance.md)** | Forking a course from the template without breaking the departmental standard. | ~10 min |
 | **[Performance sanity check](../perf/README.md)** | Load testing a service-building assignment. Opt-in. | ~10 min |
 | [Sample assignment](assignment.md) | The student-facing instructions shipped with this template. Replace with your own. | — |
 

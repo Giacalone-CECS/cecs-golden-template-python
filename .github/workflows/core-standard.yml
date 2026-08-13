@@ -1,0 +1,66 @@
+name: Core Standard
+
+# ==============================================================================
+# RFP-1 "Definition of Done" — Governance Protocol.
+#
+#   "A clear implementation strategy and documentation that enables faculty to
+#    fork the framework for course-specific needs without compromising the
+#    integrity of the 'Core Standard.'"
+#
+# docs/governance.md is the strategy and the human-readable contract.
+# This workflow is what makes it hold.
+#
+# FACULTY: governance that nothing verifies is a statement of intent. The whole
+# reason this template exists is that an unverified claim of correctness reads
+# exactly like a verified one — an assignment with no grading configured
+# reports success. So the Core Standard gets a red build when it breaks, rather
+# than a paragraph asking people to be careful.
+#
+# This is intentionally cheap: no dependencies, a few seconds, runs everywhere.
+# It checks that the load-bearing pieces still EXIST. It does not grade your
+# course content, and it never will — what you teach is yours.
+# ==============================================================================
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  conformance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+
+      - name: Check Core Standard conformance
+        id: check
+        run: python3 .github/scripts/check_core_standard.py
+
+      - name: Explain a failure
+        # Only on failure, and only after the check has printed which rule
+        # broke. A red build that does not say what to do next is just noise.
+        if: failure()
+        run: |
+          {
+            echo "## ❌ Core Standard not met"
+            echo ""
+            echo "This repository has diverged from the departmental Core Standard."
+            echo "The failing rule is named in the step above."
+            echo ""
+            echo "See [docs/governance.md](docs/governance.md) for what each rule"
+            echo "protects and what you are free to change."
+            echo ""
+            echo "If your course genuinely needs an exception, raise it with the"
+            echo "curriculum committee rather than deleting the check — the point"
+            echo "of a standard is that it is not silently forkable."
+          } >> "$GITHUB_STEP_SUMMARY"
