@@ -23,7 +23,7 @@ zero to a verified working assignment, no prior experience assumed.
 | [Writing tests](docs/writing-tests.md) | Test types, weighting, traps |
 | [Troubleshooting](docs/troubleshooting.md) | Symptom → diagnosis → fix |
 | [Performance sanity check](perf/README.md) | Load testing — when to enable it, and what it does not test |
-| [Governance](docs/governance.md) | What you must keep when forking, and what is yours to change |
+| [Governance](docs/governance.md) | The recommended baseline — advisory, not mandatory — and what is entirely yours |
 
 The rest of this README is about **this repository** — its layout, its CI, and
 what to change when you make it your own.
@@ -38,7 +38,7 @@ what to change when you make it your own.
 | `VERIFICATION-LOG.md` | Required. The student's record of AI assistance. |
 | `.github/workflows/ci.yml` | Runs the suite on every push, so students see pass/fail without waiting on a grade. Two modes — see below. |
 | `perf/` | Performance sanity check — 75 concurrent users, latency and error-rate thresholds. **Opt-in**, see [perf/README.md](perf/README.md). |
-| `.github/workflows/core-standard.yml` | Enforces the departmental [Core Standard](docs/governance.md). Runs on every push. |
+| `.github/workflows/core-standard.yml` | Advisory self-check against the recommended [baseline](docs/governance.md). Reports; never fails your build. |
 | `LICENSE` | MIT. Fork it, adapt it, teach with it. |
 
 ---
@@ -157,6 +157,6 @@ grading contract is "a command that exits non-zero on failure," not a language.
 ## License
 
 [MIT](LICENSE). Fork it, adapt it, teach with it, ship it in your own
-organization. The [Core Standard](docs/governance.md) is a departmental
-convention for CECS courses, not a license restriction — outside the
-department, take what is useful and ignore the rest.
+organization. The [recommended baseline](docs/governance.md) is a
+suggestion for CECS courses, not a license restriction and not a requirement —
+take what is useful and ignore the rest.

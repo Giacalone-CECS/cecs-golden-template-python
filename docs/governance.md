@@ -1,131 +1,135 @@
-# Governance protocol
+# Governance — the recommended baseline
 
-How a course forks this template for its own needs **without** the departmental
-standard dissolving one fork at a time.
-
-RFP-1 asks for "a clear implementation strategy and documentation that enables
-faculty to fork the framework for course-specific needs without compromising
-the integrity of the Core Standard." This document is that contract. The
-[`Core Standard` workflow](../.github/workflows/core-standard.yml) enforces it.
+How to adapt this template for your course, and what the task force suggests
+keeping along the way.
 
 > [!IMPORTANT]
-> **The standard is enforced, not requested.** A repository that breaks the
-> Core Standard gets a red build. Governance that nothing verifies is a
-> statement of intent — and this whole template exists because an unverified
-> claim of correctness reads exactly like a verified one.
+> **None of this is mandatory for any faculty member.**
+>
+> The Chair was explicit on this point: the golden template is offered as a
+> solid guideline — a best practice — not as policy. It does not replace any
+> course policy, and a course that ignores every suggestion below is not doing
+> anything wrong.
+>
+> What follows is advice with reasons attached, so you can judge which parts
+> apply to you. If a reason does not fit your course, the suggestion does not
+> either.
 
 ---
 
-## The bargain
+## The idea
 
-**Faculty autonomy over content. Departmental consistency of structure.**
+**Your content is yours. Structure is worth sharing.**
 
-You should never have to ask permission to teach your course your way. What you
-teach, in what language, weighted how you like, is yours. What a *student*
-encounters structurally — where the instructions live, that their work is
-tested automatically, that AI assistance is disclosed — should be the same in
-CECS 174 and CECS 478.
+What you teach, in what language, weighted how you like, is nobody's business
+but yours. The part worth converging on is smaller: where a student looks for
+instructions, whether their work is checked automatically, whether AI use gets
+disclosed the same way twice.
 
-That is the entire trade. Everything below follows from it.
+A student taking four CECS courses currently meets four conventions. Shrinking
+that to one is the only thing this baseline is trying to do — and it is worth
+doing only for as long as it is actually helping.
 
-## The Core Standard — five rules
+## The five suggestions
 
-| ID | Rule | What it protects |
+| ID | Suggestion | Why it's suggested |
 |---|---|---|
-| **CS-1** | `VERIFICATION-LOG.md` exists, with its Tools / Verification / Attestation sections | The AI-assistance audit trail RFP-1 makes mandatory. Without it there is no consistent record of how students used AI. |
-| **CS-2** | `tests/` contains real, discoverable test files | An empty suite reports success. This is the failure the template was built to fix. |
-| **CS-3** | A workflow triggers on `push` or `pull_request` | The student feedback loop. A `workflow_dispatch`-only repo gives students nothing. |
-| **CS-4** | `docs/` contains student-facing instructions | An assignment with no instructions is not an assignment. |
-| **CS-5** | `README.md` exists and is more than a stub | Orientation. A one-line README helps nobody — this repo's config half started that way. |
+| **CS-1** | Keep `VERIFICATION-LOG.md` and its Tools / Verification / Attestation sections | A disclosure record only helps if it looks the same across courses. A student who meets three formats in one term learns the format, not the habit. |
+| **CS-2** | Keep real test files in `tests/` | An empty suite reports success. That is the failure this template was built around. |
+| **CS-3** | Keep a workflow on `push` / `pull_request` | Students find out their work broke immediately rather than when you tell them. Fewer office hours that open with "it didn't work." |
+| **CS-4** | Keep student instructions in `docs/` | Predictable location across courses. |
+| **CS-5** | Keep a README that orients someone | A one-line stub helps nobody — this project's own config README started that way. |
 
-Each rule checks that a load-bearing piece **exists**. None inspects your course
+Each looks only at whether something **exists**. None inspects your course
 content, and none ever will.
 
-## What you are free to change
+### When a suggestion doesn't fit
 
-Everything else. Explicitly:
+Plenty of legitimate courses will break several of these:
 
-- **The exercise.** Replace `src/` and `tests/` wholesale.
-- **The language.** Python is the sample, not the standard. Node, Java, C, Go —
-  the grading contract is "a command that exits non-zero on failure."
-- **The number of tests and their weighting.** Case count is your rubric.
-- **Performance thresholds**, or dropping the perf check entirely for
-  assignments with no service.
-- **Due dates, repo naming, branch policy, all prose.**
-- **Adding** anything: linters, type checks, extra workflows, more docs.
+- **Grading by in-person demo?** CS-3 is noise for you.
+- **Instructions in Canvas?** CS-4 doesn't apply.
+- **A course where AI use is banned outright and enforced differently?** CS-1
+  may be redundant.
 
 > [!TIP]
-> The Core Standard is a floor, not a ceiling. It has nothing to say about what
-> you add — only about what you remove.
+> There is no exception process, because there is nothing to get an exception
+> from. Skip what doesn't fit and move on.
+>
+> If you think a suggestion is wrong in general — not just for your course —
+> that's worth raising, since a rule that fits your course badly probably fits
+> three others badly too. The May Tech Review is the natural venue.
 
-## Forking a course from the template
+## Everything else is yours
+
+Explicitly:
+
+- **The exercise.** Replace `src/`, `tests/`, and `docs/` wholesale.
+- **The language.** Python is the sample, not the point. Node, Java, C, Go —
+  the grading contract is "a command that exits non-zero on failure."
+- **Test count and weighting.** Case count is your rubric.
+- **Performance thresholds**, or dropping the perf check entirely.
+- **Due dates, repo naming, branch policy, all prose.**
+- **Anything you add:** linters, type checks, extra workflows, more docs.
+
+The baseline has nothing to say about what you add — only about what the
+template started with.
+
+## Adapting the template
 
 1. **Use this template** on
    [cecs-golden-template-python](https://github.com/Giacalone-CECS/cecs-golden-template-python).
 2. Replace `src/`, `tests/`, and `docs/assignment.md` with your content.
-3. Keep `VERIFICATION-LOG.md`. Reword it freely; don't delete it or gut its
-   sections.
-4. Push. **The Core Standard check runs automatically.** Green means your fork
-   is still departmentally conformant.
+3. Keep or rewrite `VERIFICATION-LOG.md` as suits your course.
+4. Push. The self-check reports what drifted. **It will not fail your build.**
 5. Wire up grading — see [Getting started](getting-started.md).
 
-Run it locally before pushing:
+Run it yourself any time:
 
 ```sh
-python3 .github/scripts/check_core_standard.py
-python3 .github/scripts/check_core_standard.py --json   # machine-readable
+python3 .github/scripts/check_core_standard.py            # advisory (default)
+python3 .github/scripts/check_core_standard.py --strict   # exit 1 on gaps
+python3 .github/scripts/check_core_standard.py --json     # machine-readable
 ```
 
-## If a rule genuinely doesn't fit your course
+> [!NOTE]
+> **`--strict` is opt-in and it's for you, not for anyone else.** If you're
+> handing a repo to a TA and want drift caught before it reaches students, add
+> `--strict` to the run step in
+> [`core-standard.yml`](../.github/workflows/core-standard.yml). Nobody else is
+> asking you to.
 
-Some course really will have a legitimate reason to break one of these. When
-that happens:
+## Keeping this useful
 
-> [!CAUTION]
-> **Raise it with the curriculum committee. Do not delete the check.**
->
-> A standard that any repo can silently opt out of is not a standard, it is a
-> suggestion with extra steps. Deleting the workflow removes the signal without
-> removing the divergence — which is precisely the failure mode catalogued in
-> [troubleshooting](troubleshooting.md#everything-passes-including-work-that-should-fail).
+RFP-1 provides for an annual **Tech Review** each May. Good questions for it:
 
-The productive move is usually to **amend the standard for everyone** rather
-than carve out an exception for one course. If a rule doesn't fit your course,
-there is a decent chance it doesn't fit three others either.
+- Has a suggestion become busywork? Retire it. A recommendation nobody believes
+  in teaches people to ignore the whole document.
+- Is something now worth suggesting that isn't here?
+- Do the CI actions, toolchain pins, and thresholds still reflect practice?
 
-Amending: propose the change, have it reviewed, then update **both**
-`.github/scripts/check_core_standard.py` and this document in the same change.
-They are two halves of one contract and must not drift.
+Adoption path: **UGCC approval → Fall pilot with volunteer faculty →
+consideration for Spring 2027.** The pilot is where suggestions that sounded
+sensible meet courses that didn't fit them; that feedback is the point of
+running one.
 
-## Sustaining it
-
-RFP-1 provides for an annual **Tech Review** each May. That review is the right
-moment to ask:
-
-- Has a rule become busywork? Retire it. A rule nobody believes in teaches
-  people to route around the check.
-- Is something now load-bearing that isn't yet a rule?
-- Do the CI actions, toolchain pins, and thresholds still reflect current
-  practice?
-
-Adoption path: **UGCC approval → Fall pilot with volunteer faculty → departmental
-adoption for Spring 2027.** The pilot is where rules that sounded reasonable
-meet courses that didn't fit them, and it should be treated as the real test of
-this document rather than a formality.
+If you change a suggestion, update **both** this document and
+`.github/scripts/check_core_standard.py` in the same change — they're two
+halves of one description and shouldn't drift.
 
 > [!NOTE]
-> **Where this lives is a committee question.** The template currently sits in
-> an individual faculty member's teaching organization. That is fine for the
-> MVP, but a departmental standard should end up in a departmental
-> organization with more than one administrator — otherwise its continuity
-> depends on one person's account. Worth settling before Spring 2027 adoption.
+> **Where this lives is worth settling.** The template currently sits in an
+> individual faculty member's teaching organization with a single
+> administrator. Fine for a prototype; less so for something the department
+> leans on, since continuity would depend on one person's account. Worth
+> deciding before any broader adoption.
 
-## What this protocol does *not* do
+## What this is not
 
-- **It does not review your course content.** Not the exercise, not the
-  difficulty, not the grading scheme.
-- **It does not prevent forking.** It makes divergence *visible*, which is the
+- **Not policy.** It replaces no course policy and binds nobody.
+- **Not a review of your course.** Not the exercise, not the difficulty, not
+  the grading scheme.
+- **Not a gate.** The check is advisory; it makes drift visible, which is the
   opposite of preventing it.
-- **It does not run in student repositories as a grading input.** It checks
-  repository structure; it has no effect on any score. (It will flag a student
-  who deletes `VERIFICATION-LOG.md` — arguably a feature.)
+- **Not a grading input.** It looks at repository structure and has no effect
+  on any student's score.

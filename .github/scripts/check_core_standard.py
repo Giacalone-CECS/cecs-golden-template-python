@@ -1,29 +1,37 @@
 #!/usr/bin/env python3
-"""Core Standard conformance check.
+"""Core Standard self-check — a best-practice baseline, not a rule.
 
-RFP-1 asks for governance that "enables faculty to fork the framework for
-course-specific needs without compromising the integrity of the Core Standard."
-This script is the enforcing half of that: docs/governance.md says what the
-Core Standard is, and this decides whether a repo still meets it.
+============================================================================
+NONE OF THIS IS MANDATORY.
+============================================================================
 
-Governance that nothing verifies is a statement of intent. The whole reason
-this template exists is that an unverified claim of correctness reads exactly
-like a verified one — see docs/troubleshooting.md. So the Core Standard gets a
-red build when it is broken, not a paragraph asking people to be careful.
+The Chair was explicit: the golden template is offered to CECS faculty as a
+solid guideline, not as policy. Nothing here binds anyone, this script has no
+authority over your course, and a course that ignores every rule below is not
+doing anything wrong.
 
-The rules below ARE the contract, written as data so a faculty member can read
-what is required without reading Python. Keep them in sync with
-docs/governance.md; that document is the human-readable half.
+What this is: a checklist you can run against your own repo to see whether it
+still lines up with the baseline the task force recommends. Useful when you
+have adapted the template heavily and want a second pair of eyes on what drifted
+— nothing more.
 
-Deliberately language-agnostic. A course that forks this into Node or Java must
-still pass, so the test-suite rule matches common conventions across languages
-rather than assuming pytest.
+ADVISORY BY DEFAULT. It reports and exits 0. If you *want* it to hold you to
+the baseline in your own course, pass --strict and it will exit non-zero
+instead. That choice is yours to make, per course, and the default assumes you
+have not made it.
+
+The rules below are written as data so you can read what is suggested without
+reading Python. docs/governance.md is the human-readable half — keep them in
+sync if you change either.
+
+Deliberately language-agnostic: a course that adapts this to Node or Java
+should still come out clean, so the test-suite rule matches conventions across
+languages rather than assuming pytest.
 
 Usage:
-    python3 .github/scripts/check_core_standard.py
+    python3 .github/scripts/check_core_standard.py            # advisory
+    python3 .github/scripts/check_core_standard.py --strict    # exit 1 on gaps
     python3 .github/scripts/check_core_standard.py --json
-
-Exit 0 = conformant. Exit 1 = the Core Standard is broken.
 """
 
 from __future__ import annotations
@@ -36,11 +44,15 @@ import re
 import sys
 
 # --------------------------------------------------------------------------
-# THE CORE STANDARD
+# THE RECOMMENDED BASELINE
 #
-# Every rule here is a thing a course repo MUST keep. Anything not listed is
-# explicitly free to change — the exercise, the language, the number of tests,
-# the point weighting, the thresholds, the prose. See docs/governance.md.
+# Each rule is something the task force suggests keeping, with the reason it
+# is suggested. Anything not listed is entirely yours — the exercise, the
+# language, the number of tests, the weighting, the thresholds, the prose.
+#
+# And the listed items are yours too. These are recommendations with reasons
+# attached; if a reason does not apply to your course, the recommendation does
+# not either. See docs/governance.md.
 # --------------------------------------------------------------------------
 
 TEST_FILE_PATTERNS = [
@@ -60,28 +72,30 @@ VERIFICATION_LOG_SECTIONS = [
 
 
 def rule_verification_log() -> tuple[bool, str]:
-    """CS-1: the mandatory AI-assistance audit trail.
+    """CS-1: the AI-assistance disclosure record.
 
-    The one item RFP-1 calls mandatory by name. A fork may reword it or add
-    sections; it may not drop it, and it may not gut the sections that make it
-    an audit trail rather than a checkbox.
+    Suggested because a consistent record of how students used AI is only
+    useful if it looks the same across courses — a student who meets three
+    different disclosure formats in one semester learns the format, not the
+    habit. Reword it freely; the sections are what make it a record rather
+    than a checkbox.
     """
     path = "VERIFICATION-LOG.md"
     if not os.path.isfile(path):
-        return False, f"{path} is missing (RFP-1 requires it)"
+        return False, f"{path} not found — the suggested AI-disclosure record"
     text = open(path, encoding="utf-8", errors="replace").read()
     missing = [s for s in VERIFICATION_LOG_SECTIONS if s.lower() not in text.lower()]
     if missing:
-        return False, f"{path} is missing required section(s): {', '.join(missing)}"
-    return True, f"{path} present with all required sections"
+        return False, f"{path} has no section matching: {', '.join(missing)}"
+    return True, f"{path} present with the suggested sections"
 
 
 def rule_test_suite() -> tuple[bool, str]:
-    """CS-2: a real test suite.
+    """CS-2: a test suite with something in it.
 
-    An empty suite reports success, which is the failure this template was
-    built to fix. Existence of the directory is not enough — there must be
-    something in it that a test runner would pick up.
+    Suggested because an empty suite reports success — the failure this
+    template was built around. A directory alone is not the point; something a
+    test runner would actually pick up is.
     """
     if not os.path.isdir("tests"):
         return False, "tests/ directory is missing"
@@ -97,10 +111,12 @@ def rule_test_suite() -> tuple[bool, str]:
 
 
 def rule_ci_workflow() -> tuple[bool, str]:
-    """CS-3: automated validation on push.
+    """CS-3: automated feedback on push.
 
-    A course repo without CI gives students no feedback loop, which is the
-    'Automated CI/CD Framework' deliverable evaporating one fork at a time.
+    Suggested because without it students find out whether their work builds
+    when you tell them, which is slower for them and more office hours for you.
+    Plenty of good courses grade by demo instead — if that is yours, this rule
+    does not apply.
     """
     workflows = glob.glob(".github/workflows/*.yml") + glob.glob(".github/workflows/*.yaml")
     if not workflows:
@@ -127,9 +143,10 @@ def rule_ci_workflow() -> tuple[bool, str]:
 def rule_student_instructions() -> tuple[bool, str]:
     """CS-4: the student can find out what to do.
 
-    'Pedagogical Artifacts' means nothing if the assignment ships with no
-    instructions. Any markdown under docs/ satisfies this — we are checking
-    that the affordance exists, not grading the prose.
+    Suggested so instructions live in a predictable place across courses. Any
+    markdown under docs/ counts — this looks for the affordance, never at the
+    prose. If your instructions live in Canvas, that is a fine answer and this
+    rule is noise for you.
     """
     if not os.path.isdir("docs"):
         return False, "docs/ directory is missing"
@@ -140,10 +157,10 @@ def rule_student_instructions() -> tuple[bool, str]:
 
 
 def rule_readme() -> tuple[bool, str]:
-    """CS-5: a README that says something.
+    """CS-5: a README that orients someone.
 
-    The 200-byte floor exists because a one-line stub is how this repo's own
-    config README started, and it was useless to every reader who found it.
+    The 200-byte floor exists because a one-line stub is how this project's own
+    config README started, and it was useless to everyone who found it.
     """
     if not os.path.isfile("README.md"):
         return False, "README.md is missing"
@@ -163,8 +180,15 @@ RULES = [
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description="Check Core Standard conformance.")
+    ap = argparse.ArgumentParser(
+        description="Self-check against the recommended baseline. Advisory by default."
+    )
     ap.add_argument("--json", action="store_true", help="emit machine-readable results")
+    ap.add_argument(
+        "--strict",
+        action="store_true",
+        help="exit non-zero on gaps. Opt in per course if you want the guardrail.",
+    )
     args = ap.parse_args()
 
     results = []
@@ -175,20 +199,33 @@ def main() -> int:
             ok, detail = False, f"rule raised {type(exc).__name__}: {exc}"
         results.append({"id": rule_id, "name": name, "passed": ok, "detail": detail})
 
-    conformant = all(r["passed"] for r in results)
+    aligned = all(r["passed"] for r in results)
+    gaps = [r for r in results if not r["passed"]]
 
     if args.json:
-        print(json.dumps({"conformant": conformant, "rules": results}, indent=2))
+        print(json.dumps(
+            {"aligned": aligned, "strict": args.strict, "rules": results}, indent=2
+        ))
     else:
-        print("Core Standard conformance")
-        print("=" * 60)
+        print("Core Standard self-check — recommended baseline, not a requirement")
+        print("=" * 68)
         for r in results:
-            mark = "PASS" if r["passed"] else "FAIL"
+            mark = " ok " if r["passed"] else "note"
             print(f"  [{mark}] {r['id']} {r['name']}: {r['detail']}")
-        print("=" * 60)
-        print("CONFORMANT" if conformant else "NOT CONFORMANT — see docs/governance.md")
+        print("=" * 68)
+        if aligned:
+            print("Matches the recommended baseline.")
+        else:
+            print(f"{len(gaps)} item(s) differ from the recommended baseline.")
+            print("That may be exactly right for your course. See docs/governance.md")
+            print("for what each suggestion is for, so you can decide.")
+        if not args.strict and gaps:
+            print("\nAdvisory run — exiting 0. Use --strict to make gaps fail.")
 
-    return 0 if conformant else 1
+    # Advisory by default: differing from a recommendation is not an error.
+    # --strict is opt-in, for faculty who want the baseline enforced in their
+    # own course.
+    return 1 if (args.strict and not aligned) else 0
 
 
 if __name__ == "__main__":
