@@ -19,7 +19,7 @@ the autograder and the CI both depend on it.
 | `tests/` | `pytest` suite. The autograder runs this same suite. |
 | `docs/` | Assignment instructions for students. |
 | `VERIFICATION-LOG.md` | Required. The student's record of AI assistance. |
-| `.github/workflows/ci.yml` | Runs the suite on every push, so students see pass/fail without waiting on a grade. |
+| `.github/workflows/ci.yml` | Runs the suite on every push, so students see pass/fail without waiting on a grade. Two modes — see below. |
 
 ---
 
@@ -84,6 +84,27 @@ Only a red run proves the grader is wired up.
    The import smoke test is worth its one point: when a student breaks the
    import, it names that directly instead of reporting twelve confusing
    downstream errors.
+
+### Why CI is green here but red in a student copy
+
+The starter is unimplemented on purpose — every stub raises. Running the full
+suite in *this* repo would fail 12/12 and paint the template with a red X,
+which is a poor first impression for something meant to be copied, and worse,
+it trains people to ignore a red badge.
+
+So `ci.yml` has two modes, keyed on the repo's `is_template` flag rather than a
+hardcoded name, so a fork into a new course keeps working untouched:
+
+| Repo | What CI asserts |
+|---|---|
+| **Template** (this one) | The suite **collects** — imports cleanly and yields `EXPECTED_CASES` cases. That is the real check for scaffolding: it catches a broken import, a renamed module, or a test lost to a duplicate name, none of which need a solution to detect. |
+| **Student copy** | Full suite, real pass/fail. Red is the point. |
+
+If you change the number of test cases, update `EXPECTED_CASES` in `ci.yml`.
+
+Detection defaults to *student* mode when `is_template` is absent from the
+event payload. That direction is deliberate — the worst case is a template
+showing red, never a student repo silently skipping its tests.
 
 ### Adapting this to your course
 
