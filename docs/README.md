@@ -15,13 +15,14 @@ the surrounding system.
 
 ## If you read nothing else
 
-An assignment with no grading configured reports **0/0, status success** — green
-on every submission, including an empty one. A passing run is therefore not
-evidence that grading works; it is also exactly what a completely unconfigured
-assignment produces.
-
-**Before handing any assignment to students, push a deliberately wrong
-submission and confirm it comes back red.**
+> [!CAUTION]
+> An assignment with no grading configured reports **0/0, status success** —
+> green on every submission, including an empty one. A passing run is therefore
+> not evidence that grading works; it is also exactly what a completely
+> unconfigured assignment produces.
+>
+> **Before handing any assignment to students, push a deliberately wrong
+> submission and confirm it comes back red.**
 
 ## Upstream
 
@@ -33,6 +34,7 @@ Classroom 50 itself is documented at
 These guides cover the parts that wiki assumes you already know, plus the
 CSULB-specific setup.
 
+> [!NOTE]
 > Org-specific internals — the grading workflows, roster, and collected scores —
 > live in the private `Giacalone-CECS/classroom50` config repo. Nothing in these
 > guides depends on access to it.

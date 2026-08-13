@@ -13,16 +13,21 @@ including an empty repo.
 **Cause.** No grading is configured. `runner.py` resolves an entrypoint
 most-specific-first:
 
-```
-per-assignment autograder.py
-  → per-assignment tests.json      (from your `tests` block)
-    → classroom-default autograder.py
-      → vacuous pass               ← 0/0, status = success
+```mermaid
+flowchart TD
+    A{"per-assignment<br/>autograder.py?"} -->|found| A1[grade with it]
+    A -->|no| B{"per-assignment<br/>tests.json?"}
+    B -->|found| B1["grade the <code>tests</code> block"]
+    B -->|no| C{"classroom-default<br/>autograder.py?"}
+    C -->|found| C1[grade with it]
+    C -->|no| D["<b>vacuous pass</b><br/>0/0 · status = success"]
+    style D fill:#ffdce0,stroke:#cf222e,color:#1a1a1a
 ```
 
-That last step is **not an error**. It's a deliberate "no autograder configured
-yet" state so the gradebook still ingests submissions during setup. It renders
-green everywhere.
+> [!CAUTION]
+> That last step is **not an error**. It is a deliberate "no autograder
+> configured yet" state so the gradebook still ingests submissions during setup.
+> It renders green everywhere.
 
 **Confirm it:**
 
@@ -39,10 +44,11 @@ signature. A real pass has a real denominator.
 **Then re-verify by breaking something on purpose.** A green run cannot
 distinguish "correct" from "ungraded" — only a red run proves grading is live.
 
-> This is not hypothetical. It is exactly how this repo shipped a broken
-> autograder in August 2026: the assignment pointed at a template containing
-> only a README, and had no `tests` block. Every push was green and nothing
-> anywhere said otherwise.
+> [!NOTE]
+> Not hypothetical. This is exactly how a broken autograder shipped in August
+> 2026: the assignment pointed at a template containing only a README, and
+> carried no `tests` block. Every push came back green and nothing anywhere
+> said otherwise.
 
 ---
 
@@ -162,8 +168,9 @@ gh run list -R <org>/classroom50 -w "Collect Scores" -L 1
 
 ## The template repo's own CI is red
 
-**Expected, if you configured it the obvious way** — the starter is
-unimplemented, so running the full suite against it fails.
+> [!NOTE]
+> **Expected, if you configured it the obvious way** — the starter is
+> unimplemented, so running the full suite against it fails.
 
 This repository handles it with two modes keyed on the repo's `is_template`
 flag: a template asserts its suite **collects**, a student copy

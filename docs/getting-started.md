@@ -7,6 +7,7 @@ assignments take five.
 By the end you will have a real assignment that students can accept, and you
 will have **proved** it grades correctly rather than assumed it.
 
+> [!TIP]
 > Already know Classroom 50? You want the
 > [CLI Teacher Guide](https://github.com/foundation50/classroom50/wiki/CLI-Teacher-Guide)
 > instead. This is the ground-up version.
@@ -17,12 +18,14 @@ will have **proved** it grades correctly rather than assumed it.
 
 Three moving parts. The confusion beginners hit is not knowing which is which.
 
-```
-┌─────────────────────┐   names ┌──────────────────────┐  copied  ┌──────────────────┐
-│  config repo        │ ──────► │  template repo       │ ───────► │  student repo    │
-│  <org>/classroom50  │         │  starter code +      │   into   │  one per student │
-│  (private)          │ ◄────── │  tests               │          │  graded on push  │
-└─────────────────────┘  scores └──────────────────────┘          └──────────────────┘
+```mermaid
+flowchart LR
+    A["<b>Config repo</b><br/><code>org/classroom50</code><br/><i>private · you, via CLI</i>"]
+    B["<b>Template repo</b><br/>starter code + tests<br/><i>public · you, by hand</i>"]
+    C["<b>Student repo</b><br/>one per student<br/><i>graded on push</i>"]
+    A -- "names the template" --> B
+    B -- "copied on accept" --> C
+    C -- "scores collected back" --> A
 ```
 
 | Part | What it is | Who touches it |
@@ -31,10 +34,11 @@ Three moving parts. The confusion beginners hit is not knowing which is which.
 | **Template repo** | An ordinary repo with starter code and tests, flagged as a GitHub template. | You, by hand |
 | **Student repo** | A copy made when a student accepts. Graded automatically on push. | The student |
 
-**The single most common beginner misconception:** that the tests live in the
-template and that's enough. They don't and it isn't. The template holds the test
-*files*; the config repo holds the instruction to *run* them. Miss the second
-and everything silently passes — see [step 7](#step-7--prove-it-actually-grades).
+> [!WARNING]
+> **The most common beginner misconception:** that putting tests in the template
+> is enough. It isn't. The template holds the test *files*; the config repo holds
+> the instruction to *run* them. Miss the second and everything silently passes —
+> see [step 7](#step-7--prove-it-actually-grades).
 
 ---
 
@@ -58,8 +62,9 @@ gh teacher login
 `read:org`, `repo`, `workflow`). Install `gh-student` too — you will use it in
 step 7 to verify your own assignment the way a student experiences it.
 
-> **Already done for `Giacalone-CECS`.** If you are working in our org, skip to
-> [step 3](#step-3--add-a-classroom) — the org is initialized and the config repo
+> [!NOTE]
+> **Already done for `Giacalone-CECS`.** Working in our org? Skip to
+> [step 3](#step-3--add-a-classroom) — it's initialized and the config repo
 > exists.
 
 ---
@@ -79,10 +84,13 @@ permissions.
 
 It prompts for a **service token** — a fine-grained PAT used by the
 score-collection workflow. Create it at **Settings → Developer settings →
-Personal access tokens → Fine-grained tokens**, and set **Resource owner to the
-organization**, not your personal account. That single dropdown is the one
-people get wrong; a token owned by your account cannot see org repos and score
-collection will fail later with a confusing permissions error.
+Personal access tokens → Fine-grained tokens**.
+
+> [!IMPORTANT]
+> Set **Resource owner** to the **organization**, not your personal account.
+> This is the single dropdown people get wrong. A personally-owned token cannot
+> see org repos, and score collection fails much later with a confusing
+> permissions error.
 
 `init` is idempotent. Re-run it any time.
 
@@ -136,9 +144,10 @@ The short name must be lowercase letters, digits, and hyphens (2–39 chars). It
 becomes part of every student repo name — `<short-name>-<assignment>-<username>` —
 so pick something you will still want to read in six months.
 
+> [!TIP]
 > **Coming from GitHub Classroom?** `gh teacher classroom migrate --source <id-or-org>
 > --target <org>` copies your starter repos over and creates the classroom in one
-> step. Rosters and scores do not migrate. Pass `--dry-run` first.
+> step. Rosters and scores do **not** migrate. Pass `--dry-run` first.
 
 ---
 
@@ -179,9 +188,10 @@ gh teacher assignment add Giacalone-CECS cecs-378-fa26 lab-01-stats \
     --due 2026-09-15T23:59:00-07:00
 ```
 
-**At this point the assignment exists and grades nothing.** That is not a bug
-you can see — it is the default state, and it reports success. Step 6 is what
-makes grading real.
+> [!CAUTION]
+> **The assignment now exists and grades nothing.** That is not a bug you can
+> see — it is the default state, and it reports *success*. Step 6 is what makes
+> grading real.
 
 ---
 
@@ -219,7 +229,8 @@ Full detail on test types and weighting: **[Writing tests](writing-tests.md)**.
 
 ## Step 7 — Prove it actually grades
 
-> **Do not skip this.** It is the only step that distinguishes a working
+> [!CAUTION]
+> **Do not skip this step.** It is the only one that distinguishes a working
 > autograder from a broken one.
 
 An assignment with no tests configured returns **0/0, status success** — green,

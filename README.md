@@ -7,6 +7,7 @@ and a Verification Log the student fills in.
 Replace the sample `stats` exercise with your own content. **Keep the shape** —
 the autograder and the CI both depend on it.
 
+> [!NOTE]
 > Files in this repo carry `FACULTY:` comments explaining why each piece is the
 > way it is. They are written for whoever adapts this next. Students can ignore
 > them, and you can strip them once your own version settles.
@@ -54,15 +55,20 @@ your final push — it is part of the grade.
 
 ### The one failure mode that will bite you
 
-**An assignment with no `tests` block grades everything as a pass.**
+> [!CAUTION]
+> **An assignment with no `tests` block grades everything as a pass.**
 
 The runner resolves a grading entrypoint in this order:
 
-```
-per-assignment autograder.py
-  → per-assignment tests.json   (materialized from your `tests` block)
-    → classroom-default autograder.py
-      → vacuous pass
+```mermaid
+flowchart TD
+    A{"per-assignment<br/>autograder.py?"} -->|found| A1[grade with it]
+    A -->|no| B{"per-assignment<br/>tests.json?"}
+    B -->|found| B1["grade the <code>tests</code> block"]
+    B -->|no| C{"classroom-default<br/>autograder.py?"}
+    C -->|found| C1[grade with it]
+    C -->|no| D["<b>vacuous pass</b><br/>0/0 · status = success"]
+    style D fill:#ffdce0,stroke:#cf222e,color:#1a1a1a
 ```
 
 That last step is not an error state — it is a deliberate "no autograder
@@ -73,10 +79,11 @@ This is exactly how this template was found broken: it pointed at a repo with
 no code and had no `tests` block, so every push came back green and nothing
 anywhere said otherwise.
 
-**Therefore, once per assignment, before students see it:** push one
-deliberately wrong submission and confirm it comes back **red**. A green run
-proves nothing — it is what a completely unconfigured assignment also produces.
-Only a red run proves the grader is wired up.
+> [!IMPORTANT]
+> **Once per assignment, before students see it:** push one deliberately wrong
+> submission and confirm it comes back **red**. A green run proves nothing — it
+> is what a completely unconfigured assignment also produces. Only a red run
+> proves the grader is wired up.
 
 ### Two things must stay in sync
 

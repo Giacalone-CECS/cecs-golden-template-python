@@ -59,6 +59,7 @@ gh teacher assignment test add <org> <classroom> <slug> \
 | `exact` | Output matches **exactly** | Output format is itself being assessed |
 | `regex` | Expected (a regex) matches stdout | Flexible whitespace, varying numbers |
 
+> [!TIP]
 > **Choose `included` unless you mean to grade formatting.** `exact` fails a
 > correct program that printed `Enter a name: ` first, and students cannot tell
 > a logic error from a trailing-space error. If you *are* grading output format,
@@ -86,6 +87,7 @@ the points across the reported cases**. 9 of 12 passing scores 9.
 
 This surprises people, so state it plainly:
 
+> [!IMPORTANT]
 > A `python` test carries **one** point value for the **whole suite**. The
 > runner divides it across however many cases pytest reports.
 
@@ -163,8 +165,9 @@ A timeout reads to students as a wrong answer.
 package installs, no persistence between tests, no clock or randomness without a
 fixed seed. A flaky test is a grade appeal.
 
-**Never put secrets in a test command.** These run in the student's repo, and
-they can print anything the job can read.
+> [!CAUTION]
+> **Never put secrets in a test command.** These run inside the student's repo,
+> and a student can print anything the job can read.
 
 ---
 
@@ -175,8 +178,8 @@ test, to inspect files rather than run them, or to hide the tests entirely.
 
 Drop an `autograder.py` at `<classroom>/autograders/<slug>/` in your
 organization's `classroom50` config repo — it takes precedence over the `tests`
-block for that assignment. A classroom-wide
-default goes in via `gh teacher autograder set-default`.
+block for that assignment. A classroom-wide default goes in via
+`gh teacher autograder set-default`.
 
 See the [Autograders wiki](https://github.com/foundation50/classroom50/wiki/Autograders).
 
@@ -190,6 +193,8 @@ real teaching decision, not just a technical one.
 
 ## Before you hand it to students
 
-Whatever you wrote, **push a deliberately wrong submission and confirm it comes
-back red.** A green run is exactly what an assignment with no tests at all
-produces. See [Getting started, step 7](getting-started.md#step-7--prove-it-actually-grades).
+> [!CAUTION]
+> Whatever you wrote, **push a deliberately wrong submission and confirm it
+> comes back red.** A green run is exactly what an assignment with no tests at
+> all produces.
+> See [Getting started, step 7](getting-started.md#step-7--prove-it-actually-grades).
