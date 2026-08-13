@@ -19,6 +19,26 @@ name: CI
 #   Why have both at all? Turnaround. Grading runs on submission; this runs on
 #   every push. Students who can see red immediately fix it themselves instead
 #   of arriving at office hours with "it didn't work."
+#
+# ------------------------------------------------------------------------------
+# TWO MODES, because the same file runs in two very different repos
+# ------------------------------------------------------------------------------
+#
+#   TEMPLATE repo (this one, or any repo flagged is_template):
+#       The starter is unimplemented on purpose — every stub raises. Running the
+#       full suite here would fail 12/12 and paint the template with a red X,
+#       which is a terrible first impression for a repo whose entire job is to
+#       be copied and to look trustworthy while doing it.
+#       So the template checks that the suite COLLECTS: imports cleanly and
+#       yields the expected number of cases. That is the meaningful assertion
+#       for scaffolding — it catches a broken import or a renamed module, which
+#       are the ways a template actually breaks.
+#
+#   STUDENT repo (a copy — is_template is false):
+#       Full suite, real pass/fail. Red is the point.
+#
+#   Detection uses `is_template` rather than a hardcoded repo name so that a
+#   fork of this template into a new course keeps working with no edits.
 # ==============================================================================
 
 on:
@@ -33,6 +53,13 @@ permissions:
                         # workflow runs code students wrote. Do not add write
                         # scopes or expose secrets here — a student can print
                         # anything this job can read.
+
+env:
+  # FACULTY: update if you change the number of test cases. The template-mode
+  # check asserts this exact count, so a test accidentally deleted or shadowed
+  # by a duplicate name gets caught here instead of silently reducing what
+  # students are graded on.
+  EXPECTED_CASES: '12'
 
 jobs:
   test:
@@ -59,7 +86,35 @@ jobs:
           python3 -m pip install --upgrade pip
           python3 -m pip install -r requirements.txt
 
-      - name: Run tests
+      - name: Decide mode
+        id: mode
+        # `github.event.repository.is_template` is absent on some event types,
+        # so treat anything that is not an explicit "true" as a student repo.
+        # Defaulting to student mode is the safe direction: the worst case is a
+        # template showing red, never a student repo silently skipping tests.
+        run: |
+          if [ "${{ github.event.repository.is_template }}" = "true" ]; then
+            echo "value=template" >> "$GITHUB_OUTPUT"
+            echo "Template repo — validating that the suite collects."
+          else
+            echo "value=student" >> "$GITHUB_OUTPUT"
+            echo "Student repo — running the full suite."
+          fi
+
+      - name: Validate test suite collects (template repo)
+        if: steps.mode.outputs.value == 'template'
+        run: |
+          set -euo pipefail
+          python3 -m pytest --collect-only -q
+          found=$(python3 -m pytest --collect-only -q 2>/dev/null | grep -cE '^tests/.*::')
+          echo "collected $found case(s), expected $EXPECTED_CASES"
+          if [ "$found" -ne "$EXPECTED_CASES" ]; then
+            echo "::error::Expected $EXPECTED_CASES test cases, collected $found. Update EXPECTED_CASES if this was intentional."
+            exit 1
+          fi
+
+      - name: Run tests (student repo)
+        if: steps.mode.outputs.value == 'student'
         run: python3 -m pytest -q
 
       - name: Check the Verification Log was filled in
@@ -74,7 +129,7 @@ jobs:
         # The log is graded by you, not here. Machine-checking whether a
         # reflective document is *honest* is not something CI can do, and
         # pretending otherwise invites students to write for the checker.
-        if: always()
+        if: always() && steps.mode.outputs.value == 'student'
         run: |
           if grep -qE '^Name:\s*$' VERIFICATION-LOG.md 2>/dev/null; then
             echo "::warning file=VERIFICATION-LOG.md::Verification Log is not signed — fill it in before your final push."
