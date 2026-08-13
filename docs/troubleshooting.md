@@ -35,14 +35,14 @@ flowchart TD
 gh teacher assignment test list <org> <classroom> <slug>
 ```
 
-Empty output means no tests. Also check the score itself — `0/0` is the
+Empty output means no tests. Also check the score itself: `0/0` is the
 signature. A real pass has a real denominator.
 
 **Fix.** Add a `tests` block ([Writing tests](writing-tests.md)), or drop an
 `autograder.py` at `<classroom>/autograders/<slug>/`.
 
 **Then re-verify by breaking something on purpose.** A green run cannot
-distinguish "correct" from "ungraded" — only a red run proves grading is live.
+distinguish "correct" from "ungraded". Only a red run proves grading is live.
 
 > [!NOTE]
 > Not hypothetical. This is exactly how a broken autograder shipped in August
@@ -72,8 +72,8 @@ Then confirm the bundle is actually being served:
 curl -sI https://<org>.github.io/classroom50/<classroom>/autograders/<slug>.tar.gz
 ```
 
-`200` is good. `404` means it never published — check that Pages is enabled and
-the workflow finished.
+`200` is good. `404` means it never published, so check that Pages is enabled
+and the workflow finished.
 
 ---
 
@@ -110,7 +110,7 @@ gh teacher assignment test remove <org> <classroom> <slug> "<test name>"
 gh teacher assignment test add ... --comparison included ...
 ```
 
-Use `exact` only when output formatting is itself being graded — and say so in
+Use `exact` only when output formatting is itself being graded, and say so in
 the assignment text.
 
 ---
@@ -159,7 +159,7 @@ gh run list -R <org>/classroom50 -w "Collect Scores" -L 1
 
 1. They pushed to a non-default branch. The grading workflow triggers on the
    default branch.
-2. They accepted before you added the `tests` block — their repo has the shim
+2. They accepted before you added the `tests` block, so their repo has the shim
    but nothing to grade. Have them push again; the runner fetches config at
    grade time, so a new push picks it up without re-accepting.
 3. Actions are disabled org-wide. `gh teacher init` enables them; re-run it.
@@ -169,13 +169,13 @@ gh run list -R <org>/classroom50 -w "Collect Scores" -L 1
 ## The template repo's own CI is red
 
 > [!NOTE]
-> **Expected, if you configured it the obvious way** — the starter is
+> **Expected, if you configured it the obvious way.** The starter is
 > unimplemented, so running the full suite against it fails.
 
 This repository handles it with two modes keyed on the repo's `is_template`
 flag: a template asserts its suite **collects**, a student copy
-runs the **full suite**. Copy that pattern rather than deleting the workflow —
-a template with no CI can't catch a broken import before thirty students hit it.
+runs the **full suite**. Copy that pattern rather than deleting the workflow. A
+template with no CI can't catch a broken import before thirty students hit it.
 
 ---
 
@@ -185,5 +185,5 @@ a template with no CI can't catch a broken import before thirty students hit it.
 - Grading internals: [Autograders wiki](https://github.com/foundation50/classroom50/wiki/Autograders)
 - Schemas: [`foundation50/classroom50/schemas`](https://github.com/foundation50/classroom50/tree/main/schemas)
 - The runner itself: `.github/scripts/runner.py` in your organization's
-  `classroom50` config repo — the docstrings are accurate and worth reading
-  when behavior surprises you.
+  `classroom50` config repo. The docstrings are accurate and worth reading when
+  behavior surprises you.

@@ -7,7 +7,7 @@ keeping along the way.
 > **None of this is mandatory for any faculty member.**
 >
 > The Chair was explicit on this point: the golden template is offered as a
-> solid guideline — a best practice — not as policy. It does not replace any
+> solid guideline, a best practice, not as policy. It does not replace any
 > course policy, and a course that ignores every recommendation below is not
 > doing anything wrong.
 >
@@ -27,7 +27,7 @@ instructions, whether their work is checked automatically, whether AI use gets
 disclosed the same way twice.
 
 A student taking four CECS courses currently meets four conventions. Shrinking
-that to one is the only thing this baseline is trying to do — and it is worth
+that to one is the only thing this baseline is trying to do, and it is worth
 doing only for as long as it is actually helping.
 
 ## The five recommendations
@@ -38,7 +38,7 @@ doing only for as long as it is actually helping.
 | **CS-2** | Keep real test files in `tests/` | An empty suite reports success. That is the failure this template was built around. |
 | **CS-3** | Keep a workflow on `push` / `pull_request` | Students find out their work broke immediately rather than when you tell them. Fewer office hours that open with "it didn't work." |
 | **CS-4** | Keep student instructions in `docs/` | Predictable location across courses. |
-| **CS-5** | Keep a README that orients someone | A one-line stub helps nobody — this project's own config README started that way. |
+| **CS-5** | Keep a README that orients someone | A one-line stub helps nobody. This project's own config README started that way. |
 
 Each looks only at whether something **exists**. None inspects your course
 content, and none ever will.
@@ -56,7 +56,7 @@ Plenty of legitimate courses will break several of these:
 > There is no exception process, because there is nothing to get an exception
 > from. Skip what doesn't fit and move on.
 >
-> If you think a recommendation is wrong in general — not just for your course —
+> If you think a recommendation is wrong in general, not just for your course,
 > that's worth raising, since one that fits your course badly probably fits
 > three others badly too. The May Tech Review is the natural venue.
 
@@ -65,14 +65,14 @@ Plenty of legitimate courses will break several of these:
 Explicitly:
 
 - **The exercise.** Replace `src/`, `tests/`, and `docs/` wholesale.
-- **The language.** Python is the sample, not the point. Node, Java, C, Go —
-  the grading contract is "a command that exits non-zero on failure."
+- **The language.** Python is the sample, not the point. Node, Java, C, Go: the
+  grading contract is "a command that exits non-zero on failure."
 - **Test count and weighting.** Case count is your rubric.
 - **Performance thresholds**, or dropping the perf check entirely.
 - **Due dates, repo naming, branch policy, all prose.**
 - **Anything you add:** linters, type checks, extra workflows, more docs.
 
-The baseline has nothing to say about what you add — only about what the
+The baseline has nothing to say about what you add, only about what the
 template started with.
 
 ## Adapting the template
@@ -82,7 +82,7 @@ template started with.
 2. Replace `src/`, `tests/`, and `docs/assignment.md` with your content.
 3. Keep or rewrite `VERIFICATION-LOG.md` as suits your course.
 4. Push. The self-check reports what drifted. **It will not fail your build.**
-5. Wire up grading — see [Getting started](getting-started.md).
+5. Wire up grading. See [Getting started](getting-started.md).
 
 Run it yourself any time:
 
@@ -114,8 +114,8 @@ sounded sensible meet courses that didn't fit them; that feedback is the point o
 running one.
 
 If you change a recommendation, update **both** this document and
-`.github/scripts/check_core_standard.py` in the same change — they're two
-halves of one description and shouldn't drift.
+`.github/scripts/check_core_standard.py` in the same change. They're two halves
+of one description and shouldn't drift.
 
 > [!NOTE]
 > **Where this lives is worth settling.** The template currently sits in an

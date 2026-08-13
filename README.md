@@ -4,8 +4,8 @@ A starting point for a CECS course assignment: a small Python package under
 `src/`, a matching `pytest` suite under `tests/`, CI that runs on every push,
 and a Verification Log the student fills in.
 
-Replace the sample `stats` exercise with your own content. **Keep the shape** —
-the autograder and the CI both depend on it.
+Replace the sample `stats` exercise with your own content. Keep the shape: the
+autograder and the CI both depend on it.
 
 > [!NOTE]
 > Files in this repo carry `FACULTY:` comments explaining why each piece is the
@@ -14,19 +14,20 @@ the autograder and the CI both depend on it.
 
 ## Start here
 
-**Never set up an autograder before?** → **[docs/getting-started.md](docs/getting-started.md)** —
-zero to a verified working assignment, no prior experience assumed.
+Never set up an autograder before? Start with
+**[docs/getting-started.md](docs/getting-started.md)**. It goes from zero to a
+verified working assignment and assumes no prior experience.
 
 | Guide | For |
 |---|---|
 | [Getting started](docs/getting-started.md) | First-time setup, end to end |
 | [Writing tests](docs/writing-tests.md) | Test types, weighting, traps |
 | [Troubleshooting](docs/troubleshooting.md) | Symptom → diagnosis → fix |
-| [Performance sanity check](perf/README.md) | Load testing — when to enable it, and what it does not test |
-| [Governance](docs/governance.md) | The recommended baseline — advisory, not mandatory — and what is entirely yours |
+| [Performance sanity check](perf/README.md) | Load testing: when to enable it, and what it does not test |
+| [Governance](docs/governance.md) | The recommended baseline (advisory, not mandatory), and what is entirely yours |
 
-The rest of this README is about **this repository** — its layout, its CI, and
-what to change when you make it your own.
+The rest of this README is about this repository: its layout, its CI, and what
+to change when you make it your own.
 
 ## Layout
 
@@ -36,8 +37,8 @@ what to change when you make it your own.
 | `tests/` | `pytest` suite. The autograder runs this same suite. |
 | `docs/` | Assignment instructions for students. |
 | `VERIFICATION-LOG.md` | Required. The student's record of AI assistance. |
-| `.github/workflows/ci.yml` | Runs the suite on every push, so students see pass/fail without waiting on a grade. Two modes — see below. |
-| `perf/` | Performance sanity check — 75 concurrent users, latency and error-rate thresholds. **Opt-in**, see [perf/README.md](perf/README.md). |
+| `.github/workflows/ci.yml` | Runs the suite on every push, so students see pass/fail without waiting on a grade. Two modes; see below. |
+| `perf/` | Performance sanity check. 75 concurrent users, latency and error-rate thresholds. **Opt-in**; see [perf/README.md](perf/README.md). |
 | `.github/workflows/core-standard.yml` | Advisory self-check against the recommended [baseline](docs/governance.md). Reports; never fails your build. |
 | `LICENSE` | MIT. Fork it, adapt it, teach with it. |
 
@@ -52,7 +53,7 @@ python3 -m pytest -q
 
 Implement the functions in `src/`, run the tests locally until they pass, then
 commit and push. CI runs the same suite. Fill in `VERIFICATION-LOG.md` before
-your final push — it is part of the grade.
+your final push. It is part of the grade.
 
 ---
 
@@ -76,9 +77,9 @@ flowchart TD
     style D fill:#ffdce0,stroke:#cf222e,color:#1a1a1a
 ```
 
-That last step is not an error state — it is a deliberate "no autograder
-configured yet" path that returns **0/0, status success**. It looks green in
-every UI. An empty submission gets the same result as a correct one.
+That last step is not an error state. It is a deliberate "no autograder
+configured yet" path that returns **0/0, status success**. It looks green in every
+UI, and an empty submission gets the same result as a correct one.
 
 This is exactly how this template was found broken: it pointed at a repo with
 no code and had no `tests` block, so every push came back green and nothing
@@ -86,9 +87,9 @@ anywhere said otherwise.
 
 > [!IMPORTANT]
 > **Once per assignment, before students see it:** push one deliberately wrong
-> submission and confirm it comes back **red**. A green run proves nothing — it
-> is what a completely unconfigured assignment also produces. Only a red run
-> proves the grader is wired up.
+> submission and confirm it comes back **red**. A green run proves nothing. It is
+> what a completely unconfigured assignment also produces. Only a red run proves
+> the grader is wired up.
 
 ### Two things must stay in sync
 
@@ -113,30 +114,30 @@ anywhere said otherwise.
 
 ### Why CI is green here but red in a student copy
 
-The starter is unimplemented on purpose — every stub raises. Running the full
-suite in *this* repo would fail 12/12 and paint the template with a red X,
-which is a poor first impression for something meant to be copied, and worse,
-it trains people to ignore a red badge.
+The starter is unimplemented on purpose: every stub raises. Running the full
+suite in *this* repo would fail 12/12 and paint the template with a red X. That
+is a poor first impression for something meant to be copied, and worse, it
+trains people to ignore a red badge.
 
 So `ci.yml` has two modes, keyed on the repo's `is_template` flag rather than a
 hardcoded name, so a fork into a new course keeps working untouched:
 
 | Repo | What CI asserts |
 |---|---|
-| **Template** (this one) | The suite **collects** — imports cleanly and yields `EXPECTED_CASES` cases. That is the real check for scaffolding: it catches a broken import, a renamed module, or a test lost to a duplicate name, none of which need a solution to detect. |
+| **Template** (this one) | The suite collects: imports cleanly and yields `EXPECTED_CASES` cases. That is the real check for scaffolding. It catches a broken import, a renamed module, or a test lost to a duplicate name, none of which need a solution to detect. |
 | **Student copy** | Full suite, real pass/fail. Red is the point. |
 
 If you change the number of test cases, update `EXPECTED_CASES` in `ci.yml`.
 
 Detection defaults to *student* mode when `is_template` is absent from the
-event payload. That direction is deliberate — the worst case is a template
+event payload. That direction is deliberate. The worst case is a template
 showing red, never a student repo silently skipping its tests.
 
 ### Adapting this to your course
 
 Work outward from the middle:
 
-1. Rewrite `src/` with your exercise — stubs that **raise**, not `pass`.
+1. Rewrite `src/` with your exercise. Stubs must raise, not `pass`.
 2. Rewrite `tests/` to match. Case count is your weighting (see the notes in
    that file).
 3. Rewrite `docs/assignment.md`.
@@ -149,7 +150,7 @@ and it is the one people skip.
 ### Scope note
 
 Python is the sample, not a requirement. A Node version is the same structure
-with `npm test` in place of `pytest` — the `tests` block takes any command. The
+with `npm test` in place of `pytest`; the `tests` block takes any command. The
 grading contract is "a command that exits non-zero on failure," not a language.
 
 ---
@@ -158,5 +159,5 @@ grading contract is "a command that exits non-zero on failure," not a language.
 
 [MIT](LICENSE). Fork it, adapt it, teach with it, ship it in your own
 organization. The [recommended baseline](docs/governance.md) is a
-recommendation for CECS courses, not a license restriction and not a requirement —
-take what is useful and ignore the rest.
+recommendation for CECS courses, not a license restriction and not a
+requirement. Take what is useful and ignore the rest.

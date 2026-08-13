@@ -34,7 +34,7 @@ Require a *specific* exit code with `--exit-code`:
     --run "./prog --selftest" --exit-code 42 --points 1
 ```
 
-**Lead with a cheap `run` test** — "it compiles," "it imports." When a student
+**Lead with a cheap `run` test**: "it compiles," "it imports." When a student
 breaks the build, that test names the actual problem instead of letting twelve
 downstream tests fail with noise.
 
@@ -63,7 +63,7 @@ gh teacher assignment test add <org> <classroom> <slug> \
 > **Choose `included` unless you mean to grade formatting.** `exact` fails a
 > correct program that printed `Enter a name: ` first, and students cannot tell
 > a logic error from a trailing-space error. If you *are* grading output format,
-> say so in the assignment text — otherwise it reads as a gotcha.
+> say so in the assignment text. Otherwise it reads as a gotcha.
 
 For long fixtures, use files bundled next to the tests instead of inline
 strings: `--input-file names.txt --expected-file expected.txt`.
@@ -92,7 +92,7 @@ This surprises people, so state it plainly:
 > runner divides it across however many cases pytest reports.
 
 So four tests on `mean` and one on `mode` makes `mean` worth **four times** as
-much — not because you weighted it, but because you wrote more tests. Count
+much, not because you weighted it but because you wrote more tests. Count
 deliberately.
 
 **Corollary: split your assertions.** Each case is one line of feedback. A test
@@ -106,10 +106,10 @@ gradient instead of a cliff.
 
 | Flag | Applies to | Notes |
 |---|---|---|
-| `--name` | all | Unique within the assignment. Shown to students — write it as feedback: "handles empty input", not "test 3". |
+| `--name` | all | Unique within the assignment. Shown to students, so write it as feedback: "handles empty input", not "test 3". |
 | `--type` | all | `run` \| `io` \| `python` |
 | `--run` | all | The command |
-| `--setup` | all | Runs first — compile, install deps. A failure here fails the test. |
+| `--setup` | all | Runs first: compile, install deps. A failure here fails the test. |
 | `--points` | all | Defaults to 0 = informational, runs but doesn't score |
 | `--timeout` | all | Seconds, 1–600. Default 10. Raise for anything installing packages. |
 | `--exit-code` | `run` | Required exit code |
@@ -129,7 +129,7 @@ gh teacher assignment test remove <org> <classroom> <slug> <name>
 
 ## A worked set
 
-The suite behind this template — a cheap import guard plus the real suite:
+The suite behind this template. A cheap import guard plus the real suite:
 
 ```sh
 gh teacher assignment test add Giacalone-CECS cecs-378-fa26 lab-01-stats \
@@ -177,14 +177,14 @@ Reach for a hand-written autograder when you need partial credit inside a single
 test, to inspect files rather than run them, or to hide the tests entirely.
 
 Drop an `autograder.py` at `<classroom>/autograders/<slug>/` in your
-organization's `classroom50` config repo — it takes precedence over the `tests`
+organization's `classroom50` config repo. It takes precedence over the `tests`
 block for that assignment. A classroom-wide default goes in via
 `gh teacher autograder set-default`.
 
 See the [Autograders wiki](https://github.com/foundation50/classroom50/wiki/Autograders).
 
 **Hidden tests, specifically:** don't add secret cases to the suite in the
-template — students receive that repo. Put them in `autograder.py` in the
+template, because students receive that repo. Put them in `autograder.py` in the
 config repo, which is never distributed. Weigh the cost: hidden tests move
 failures from "I can reproduce this locally" to "I have to guess," which is a
 real teaching decision, not just a technical one.

@@ -13,7 +13,7 @@ Implement three functions in `src/stats.py`. Each one currently raises
 | `median(values)` | middle value; mean of the middle two when even-length | `ValueError` on empty input |
 | `mode(values)` | most frequent value | on a tie, the one appearing first in `values`; `ValueError` on empty input |
 
-Do not change the function names or signatures — the tests import them
+Do not change the function names or signatures; the tests import them
 directly.
 
 ## How you are graded
@@ -31,5 +31,5 @@ There are no hidden tests in this sample. What you see is what is scored.
 ## Before you push
 
 Fill in `VERIFICATION-LOG.md`. If you used an AI tool at any point, say so and
-say how you checked its output. If you did not, say that instead — an empty
-log is not the same as "I did not use one."
+say how you checked its output. If you did not, say that instead. An empty log
+is not the same as "I did not use one."

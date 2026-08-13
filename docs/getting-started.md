@@ -37,8 +37,8 @@ flowchart LR
 > [!WARNING]
 > **The most common beginner misconception:** that putting tests in the template
 > is enough. It isn't. The template holds the test *files*; the config repo holds
-> the instruction to *run* them. Miss the second and everything silently passes —
-> see [step 7](#step-7--prove-it-actually-grades).
+> the instruction to *run* them. Miss the second and everything silently passes.
+> See [step 7](#step-7--prove-it-actually-grades).
 
 ---
 
@@ -59,13 +59,13 @@ gh teacher login
 ```
 
 `gh teacher login` requests the scopes these commands need (`admin:org`,
-`read:org`, `repo`, `workflow`). Install `gh-student` too — you will use it in
+`read:org`, `repo`, `workflow`). Install `gh-student` too; you will use it in
 step 7 to verify your own assignment the way a student experiences it.
 
 > [!NOTE]
 > **Already done for `Giacalone-CECS`.** Working in our org? Skip to
-> [step 3](#step-3--add-a-classroom) — it's initialized and the config repo
-> exists.
+> [step 3](#step-3--add-a-classroom). It is initialized and the config repo
+> already exists.
 
 ---
 
@@ -82,7 +82,7 @@ This creates `<org>/classroom50` (private), commits the grading workflows,
 enables Pages, and applies a least-privilege lockdown of org member
 permissions.
 
-It prompts for a **service token** — a fine-grained PAT used by the
+It prompts for a **service token**, a fine-grained PAT used by the
 score-collection workflow. Create it at **Settings → Developer settings →
 Personal access tokens → Fine-grained tokens**.
 
@@ -116,7 +116,7 @@ Two rules that will save you an afternoon:
 2. **Visibility.** Public always works. Private works only if it is *inside*
    your organization. A private template outside the org is rejected.
 
-**Don't build one from scratch the first time.** Use **this repository** — hit
+**Don't build one from scratch the first time.** Use **this repository**: hit
 *Use this template* on
 [cecs-golden-template-python](https://github.com/Giacalone-CECS/cecs-golden-template-python).
 It has the layout, a working suite, CI, and a Verification Log, and every file
@@ -141,7 +141,7 @@ gh teacher classroom add Giacalone-CECS cecs-378-fa26 \
 ```
 
 The short name must be lowercase letters, digits, and hyphens (2–39 chars). It
-becomes part of every student repo name — `<short-name>-<assignment>-<username>` —
+becomes part of every student repo name (`<short-name>-<assignment>-<username>`),
 so pick something you will still want to read in six months.
 
 > [!TIP]
@@ -168,7 +168,7 @@ gh teacher roster import <org> <classroom> roster.csv
 invite, and adds them to the classroom team so they can read in-org private
 templates. Re-running is safe.
 
-You can do this last — it doesn't block the steps below.
+You can do this last; it doesn't block the steps below.
 
 ---
 
@@ -190,7 +190,7 @@ gh teacher assignment add Giacalone-CECS cecs-378-fa26 lab-01-stats \
 
 > [!CAUTION]
 > **The assignment now exists and grades nothing.** That is not a bug you can
-> see — it is the default state, and it reports *success*. Step 6 is what makes
+> see. It is the default state, and it reports *success*. Step 6 is what makes
 > grading real.
 
 ---
@@ -219,7 +219,7 @@ gh teacher assignment test list <org> <classroom> <slug>
 ```
 
 Two tests, 13 points. The suite's 12 points are **split across its cases**
-automatically — 9 of 12 passing scores 9. The 1-point import test exists so
+automatically: 9 of 12 passing scores 9. The 1-point import test exists so
 that a broken import is reported as "your module doesn't import" instead of
 twelve confusing downstream errors.
 
@@ -233,8 +233,8 @@ Full detail on test types and weighting: **[Writing tests](writing-tests.md)**.
 > **Do not skip this step.** It is the only one that distinguishes a working
 > autograder from a broken one.
 
-An assignment with no tests configured returns **0/0, status success** — green,
-in every UI, on every submission, including an empty one. So "I pushed and it
+An assignment with no tests configured returns **0/0, status success**: green in
+every UI, on every submission, including an empty one. So "I pushed and it
 passed" is not evidence of anything. Only a **failing** run is.
 
 Accept your own assignment as a student would:
@@ -243,8 +243,8 @@ Accept your own assignment as a student would:
 gh student accept <org> <classroom> <slug>
 ```
 
-Clone the repo it prints, then **deliberately break something** — delete a
-function body, or leave the starter untouched, since the stubs already raise:
+Clone the repo it prints, then **deliberately break something**: delete a
+function body, or leave the starter untouched, since the stubs already raise.
 
 ```sh
 git commit -am "deliberately wrong" && git push

@@ -6,9 +6,9 @@ exceeds **1%**. Satisfies the RFP-1 "Performance Sanity Check" deliverable.
 
 | File | What it is |
 |---|---|
-| `smoke.js` | The k6 script — 75 VUs, thresholds, report generation |
+| `smoke.js` | The k6 script: 75 VUs, thresholds, report generation |
 | `reference_service.py` | A stand-in target so it runs out of the box. Replace with your service. |
-| `../.github/workflows/perf.yml` | The workflow. **Opt-in** — see below. |
+| `../.github/workflows/perf.yml` | The workflow. **Opt-in**; see below. |
 
 ## Running it
 
@@ -31,12 +31,12 @@ k6 run -e BASE_URL=http://localhost:3000 perf/smoke.js   # your service
 ## When to turn it on
 
 > [!IMPORTANT]
-> **Enable it** for assignments that build a service — a web app, a REST API, a
+> **Enable it** for assignments that build a service: a web app, a REST API, a
 > socket server. "Your API must serve 75 concurrent users under 200 ms with
 > under 1% errors" is a real requirement, and load testing is a genuinely
 > job-ready skill.
 >
-> **Leave it off** for assignments with no service — semaphores, buffer
+> **Leave it off** for assignments with no service: semaphores, buffer
 > overflow, crypto labs, plain library code. There is nothing to put under
 > load.
 
@@ -59,7 +59,7 @@ The capacity risk worth watching for a large-enrollment course is the
 organization's monthly Actions **minutes** budget, not concurrency. A workflow
 on a per-push trigger can run a hundred-plus times for a single student across
 a semester, and that is what exhausts a quota mid-term. This check cannot
-measure it — keep an eye on org billing instead.
+measure it. Keep an eye on org billing instead.
 
 ## The thresholds
 
@@ -75,11 +75,11 @@ when any threshold is breached, so the workflow fails on its own.
 
 The last two are guards, and they earn their place:
 
-- **`http_reqs`** — a threshold over a metric with **no samples passes
+- **`http_reqs`**. A threshold over a metric with **no samples passes
   trivially**. Without this, a run that generated no load at all (script error,
   misconfigured stage, target never reachable) reports green with nothing
   behind it.
-- **`checks`** — `check()` assertions are recorded but do **not** fail a k6 run
+- **`checks`**. `check()` assertions are recorded but do **not** fail a k6 run
   on their own. A service returning `200 OK` with an empty body would sail
   through both latency and error-rate thresholds without this.
 
@@ -92,10 +92,10 @@ Each of these was run, not assumed:
 
 | Scenario | Result |
 |---|---|
-| Healthy target, 75 VUs | ✅ PASS, exit 0 — 2,850 requests, 0.16 ms median, 0% errors |
+| Healthy target, 75 VUs | ✅ PASS, exit 0. 2,850 requests, 0.16 ms median, 0% errors |
 | Latency threshold breached | ❌ FAIL, exit 99, breaching threshold named |
 | Target unreachable | ❌ FAIL, exit 99, 100% error rate |
-| No load generated | ❌ FAIL, exit 99 — `http_reqs` guard catches it |
+| No load generated | ❌ FAIL, exit 99. The `http_reqs` guard catches it |
 
 ## The report
 
@@ -109,5 +109,5 @@ Each of these was run, not assumed:
 | `perf-summary.json` | Full raw k6 metrics |
 
 Deliberately dependency-free. The common approach imports `textSummary` from
-`jslib.k6.io`, which needs network access at run time — turning a transient CDN
-outage into a failed student grade.
+`jslib.k6.io`, which needs network access at run time. That turns a transient
+CDN outage into a failed student grade.
