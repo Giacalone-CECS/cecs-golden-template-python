@@ -1,0 +1,81 @@
+name: CI
+
+# ==============================================================================
+# Student-facing feedback loop. Runs the same suite the autograder runs, so a
+# student sees pass/fail on every push without waiting for a grade.
+#
+# FACULTY: this is NOT the grader.
+#
+#   This workflow          -> runs in the STUDENT's repo, for their benefit.
+#                             Its result has no effect on any score.
+#   The `tests` block      -> in the classroom config repo's assignments.json,
+#                             is what actually produces the grade.
+#
+#   Keeping the two consistent is a manual discipline, not an enforced one.
+#   When you change the test command in one, change it in the other. If they
+#   drift, students see green here and score zero there, and you will hear
+#   about it during the last hour before the deadline.
+#
+#   Why have both at all? Turnaround. Grading runs on submission; this runs on
+#   every push. Students who can see red immediately fix it themselves instead
+#   of arriving at office hours with "it didn't work."
+# ==============================================================================
+
+on:
+  push:
+    branches: ['**']    # FACULTY: all branches on purpose — students who work
+                        # on a side branch still get feedback there.
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read        # FACULTY: read-only, and it should stay that way. This
+                        # workflow runs code students wrote. Do not add write
+                        # scopes or expose secrets here — a student can print
+                        # anything this job can read.
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    # FACULTY: a real ceiling, not a formality. An infinite loop in a student
+    # submission otherwise burns Actions minutes until the 6-hour default kills
+    # it. With a class of 60 pushing repeatedly, that is the whole org quota.
+    # Raise it if your suite genuinely needs longer; do not remove it.
+    timeout-minutes: 5
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'   # FACULTY: pin it. "Latest" means a student's
+                                   # grade can change because GitHub moved a
+                                   # default, which is impossible to explain.
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install -r requirements.txt
+
+      - name: Run tests
+        run: python3 -m pytest -q
+
+      - name: Check the Verification Log was filled in
+        # FACULTY: advisory only, and deliberately so. A missing log should not
+        # suppress the test signal — those are two different things to assess,
+        # and conflating them means a student who forgot to sign gets no
+        # feedback on code that was fine.
+        #
+        # `if: always()` so this still runs when the tests above failed. The
+        # student most likely to skip the log is the one whose tests are red.
+        #
+        # The log is graded by you, not here. Machine-checking whether a
+        # reflective document is *honest* is not something CI can do, and
+        # pretending otherwise invites students to write for the checker.
+        if: always()
+        run: |
+          if grep -qE '^Name:\s*$' VERIFICATION-LOG.md 2>/dev/null; then
+            echo "::warning file=VERIFICATION-LOG.md::Verification Log is not signed — fill it in before your final push."
+          fi
