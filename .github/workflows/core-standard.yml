@@ -67,5 +67,5 @@ jobs:
             echo '```'
             echo ""
             echo "See [docs/governance.md](docs/governance.md) for what each"
-            echo "suggestion is for, so you can decide whether it applies to you."
+            echo "recommendation is for, so you can decide whether it applies to you."
           } >> "$GITHUB_STEP_SUMMARY"

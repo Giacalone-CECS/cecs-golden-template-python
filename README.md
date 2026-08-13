@@ -158,5 +158,5 @@ grading contract is "a command that exits non-zero on failure," not a language.
 
 [MIT](LICENSE). Fork it, adapt it, teach with it, ship it in your own
 organization. The [recommended baseline](docs/governance.md) is a
-suggestion for CECS courses, not a license restriction and not a requirement —
+recommendation for CECS courses, not a license restriction and not a requirement —
 take what is useful and ignore the rest.

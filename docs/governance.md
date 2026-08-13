@@ -1,6 +1,6 @@
 # Governance — the recommended baseline
 
-How to adapt this template for your course, and what the task force suggests
+How to adapt this template for your course, and what the task force recommends
 keeping along the way.
 
 > [!IMPORTANT]
@@ -8,12 +8,12 @@ keeping along the way.
 >
 > The Chair was explicit on this point: the golden template is offered as a
 > solid guideline — a best practice — not as policy. It does not replace any
-> course policy, and a course that ignores every suggestion below is not doing
-> anything wrong.
+> course policy, and a course that ignores every recommendation below is not
+> doing anything wrong.
 >
 > What follows is advice with reasons attached, so you can judge which parts
-> apply to you. If a reason does not fit your course, the suggestion does not
-> either.
+> apply to you. If a reason does not fit your course, the recommendation
+> does not either.
 
 ---
 
@@ -30,9 +30,9 @@ A student taking four CECS courses currently meets four conventions. Shrinking
 that to one is the only thing this baseline is trying to do — and it is worth
 doing only for as long as it is actually helping.
 
-## The five suggestions
+## The five recommendations
 
-| ID | Suggestion | Why it's suggested |
+| ID | Recommendation | Why we recommend it |
 |---|---|---|
 | **CS-1** | Keep `VERIFICATION-LOG.md` and its Tools / Verification / Attestation sections | A disclosure record only helps if it looks the same across courses. A student who meets three formats in one term learns the format, not the habit. |
 | **CS-2** | Keep real test files in `tests/` | An empty suite reports success. That is the failure this template was built around. |
@@ -43,7 +43,7 @@ doing only for as long as it is actually helping.
 Each looks only at whether something **exists**. None inspects your course
 content, and none ever will.
 
-### When a suggestion doesn't fit
+### When a recommendation doesn't fit
 
 Plenty of legitimate courses will break several of these:
 
@@ -56,8 +56,8 @@ Plenty of legitimate courses will break several of these:
 > There is no exception process, because there is nothing to get an exception
 > from. Skip what doesn't fit and move on.
 >
-> If you think a suggestion is wrong in general — not just for your course —
-> that's worth raising, since a rule that fits your course badly probably fits
+> If you think a recommendation is wrong in general — not just for your course —
+> that's worth raising, since one that fits your course badly probably fits
 > three others badly too. The May Tech Review is the natural venue.
 
 ## Everything else is yours
@@ -103,17 +103,17 @@ python3 .github/scripts/check_core_standard.py --json     # machine-readable
 
 RFP-1 provides for an annual **Tech Review** each May. Good questions for it:
 
-- Has a suggestion become busywork? Retire it. A recommendation nobody believes
-  in teaches people to ignore the whole document.
-- Is something now worth suggesting that isn't here?
+- Has a recommendation become busywork? Retire it. One nobody believes in
+  teaches people to ignore the whole document.
+- Is something now worth recommending that isn't here?
 - Do the CI actions, toolchain pins, and thresholds still reflect practice?
 
 Adoption path: **UGCC approval → Fall pilot with volunteer faculty →
-consideration for Spring 2027.** The pilot is where suggestions that sounded
-sensible meet courses that didn't fit them; that feedback is the point of
+consideration for Spring 2027.** The pilot is where recommendations that
+sounded sensible meet courses that didn't fit them; that feedback is the point of
 running one.
 
-If you change a suggestion, update **both** this document and
+If you change a recommendation, update **both** this document and
 `.github/scripts/check_core_standard.py` in the same change — they're two
 halves of one description and shouldn't drift.
 

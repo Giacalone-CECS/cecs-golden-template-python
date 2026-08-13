@@ -20,7 +20,7 @@ the baseline in your own course, pass --strict and it will exit non-zero
 instead. That choice is yours to make, per course, and the default assumes you
 have not made it.
 
-The rules below are written as data so you can read what is suggested without
+The rules below are written as data so you can read what is recommended without
 reading Python. docs/governance.md is the human-readable half — keep them in
 sync if you change either.
 
@@ -46,8 +46,8 @@ import sys
 # --------------------------------------------------------------------------
 # THE RECOMMENDED BASELINE
 #
-# Each rule is something the task force suggests keeping, with the reason it
-# is suggested. Anything not listed is entirely yours — the exercise, the
+# Each rule is something the task force recommends keeping, with the reason
+# we recommend it. Anything not listed is entirely yours — the exercise, the
 # language, the number of tests, the weighting, the thresholds, the prose.
 #
 # And the listed items are yours too. These are recommendations with reasons
@@ -74,7 +74,7 @@ VERIFICATION_LOG_SECTIONS = [
 def rule_verification_log() -> tuple[bool, str]:
     """CS-1: the AI-assistance disclosure record.
 
-    Suggested because a consistent record of how students used AI is only
+    Recommended because a consistent record of how students used AI is only
     useful if it looks the same across courses — a student who meets three
     different disclosure formats in one semester learns the format, not the
     habit. Reword it freely; the sections are what make it a record rather
@@ -82,18 +82,18 @@ def rule_verification_log() -> tuple[bool, str]:
     """
     path = "VERIFICATION-LOG.md"
     if not os.path.isfile(path):
-        return False, f"{path} not found — the suggested AI-disclosure record"
+        return False, f"{path} not found — the recommended AI-disclosure record"
     text = open(path, encoding="utf-8", errors="replace").read()
     missing = [s for s in VERIFICATION_LOG_SECTIONS if s.lower() not in text.lower()]
     if missing:
         return False, f"{path} has no section matching: {', '.join(missing)}"
-    return True, f"{path} present with the suggested sections"
+    return True, f"{path} present with the recommended sections"
 
 
 def rule_test_suite() -> tuple[bool, str]:
     """CS-2: a test suite with something in it.
 
-    Suggested because an empty suite reports success — the failure this
+    Recommended because an empty suite reports success — the failure this
     template was built around. A directory alone is not the point; something a
     test runner would actually pick up is.
     """
@@ -113,7 +113,7 @@ def rule_test_suite() -> tuple[bool, str]:
 def rule_ci_workflow() -> tuple[bool, str]:
     """CS-3: automated feedback on push.
 
-    Suggested because without it students find out whether their work builds
+    Recommended because without it students find out whether their work builds
     when you tell them, which is slower for them and more office hours for you.
     Plenty of good courses grade by demo instead — if that is yours, this rule
     does not apply.
@@ -143,7 +143,7 @@ def rule_ci_workflow() -> tuple[bool, str]:
 def rule_student_instructions() -> tuple[bool, str]:
     """CS-4: the student can find out what to do.
 
-    Suggested so instructions live in a predictable place across courses. Any
+    Recommended so instructions live in a predictable place across courses. Any
     markdown under docs/ counts — this looks for the affordance, never at the
     prose. If your instructions live in Canvas, that is a fine answer and this
     rule is noise for you.
@@ -218,7 +218,7 @@ def main() -> int:
         else:
             print(f"{len(gaps)} item(s) differ from the recommended baseline.")
             print("That may be exactly right for your course. See docs/governance.md")
-            print("for what each suggestion is for, so you can decide.")
+            print("for what each recommendation is for, so you can decide.")
         if not args.strict and gaps:
             print("\nAdvisory run — exiting 0. Use --strict to make gaps fail.")
 
