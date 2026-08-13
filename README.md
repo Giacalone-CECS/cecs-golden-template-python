@@ -22,6 +22,7 @@ zero to a verified working assignment, no prior experience assumed.
 | [Getting started](docs/getting-started.md) | First-time setup, end to end |
 | [Writing tests](docs/writing-tests.md) | Test types, weighting, traps |
 | [Troubleshooting](docs/troubleshooting.md) | Symptom → diagnosis → fix |
+| [Performance sanity check](perf/README.md) | Load testing — when to enable it, and what it does not test |
 
 The rest of this README is about **this repository** — its layout, its CI, and
 what to change when you make it your own.
@@ -35,6 +36,7 @@ what to change when you make it your own.
 | `docs/` | Assignment instructions for students. |
 | `VERIFICATION-LOG.md` | Required. The student's record of AI assistance. |
 | `.github/workflows/ci.yml` | Runs the suite on every push, so students see pass/fail without waiting on a grade. Two modes — see below. |
+| `perf/` | Performance sanity check — 75 concurrent users, latency and error-rate thresholds. **Opt-in**, see [perf/README.md](perf/README.md). |
 
 ---
 
