@@ -188,6 +188,19 @@ gh teacher assignment add Giacalone-CECS cecs-378-fa26 lab-01-stats \
     --due 2026-09-15T23:59:00-07:00
 ```
 
+Optional flags worth knowing, none of them required:
+
+| Flag | What it does |
+|---|---|
+| `--due` | Due date. Stored as UTC; omit the offset and your local zone is assumed. |
+| `--available-from` | Hides the assignment from the student list until the date passes. |
+| `--submission-mode tag` | Only `submit/*` tag pushes grade. A plain `git push` costs no Actions minutes, which matters for large sections. Default is `every-push`. |
+| `--pass-threshold` | Advisory passing bar as a percentage. Display only; it does not change scores. |
+| `--tests` | Set the whole declarative test block from a JSON file instead of adding tests one at a time. |
+
+The full list is in the
+[CLI Teacher Guide](https://github.com/foundation50/classroom50/wiki/CLI-Teacher-Guide).
+
 > [!CAUTION]
 > **The assignment now exists and grades nothing.** That is not a bug you can
 > see. It is the default state, and it reports *success*. Step 6 is what makes

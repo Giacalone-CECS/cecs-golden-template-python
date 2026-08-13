@@ -59,7 +59,22 @@ The capacity risk worth watching for a large-enrollment course is the
 organization's monthly Actions **minutes** budget, not concurrency. A workflow
 on a per-push trigger can run a hundred-plus times for a single student across
 a semester, and that is what exhausts a quota mid-term. This check cannot
-measure it. Keep an eye on org billing instead.
+measure it.
+
+> [!TIP]
+> **There is a direct lever for that.** Set the assignment's submission mode to
+> `tag` and only `submit/*` tag pushes grade; a plain `git push` costs no
+> Actions minutes at all. Students submit with `gh student submit`.
+>
+> ```sh
+> gh teacher assignment add <org> <classroom> <slug> ... --submission-mode tag
+> gh teacher assignment submission-mode <org> <classroom> <slug> tag   # retrofits existing repos
+> ```
+>
+> The tradeoff is the feedback loop: students stop getting a result on every
+> push, which is most of why CI is worth having. Reasonable middle ground is
+> `every-push` for early low-enrollment labs and `tag` for the large sections
+> where the minutes actually bite.
 
 ## The thresholds
 

@@ -157,12 +157,23 @@ gh run list -R <org>/classroom50 -w "Collect Scores" -L 1
 
 **Causes:**
 
-1. They pushed to a non-default branch. The grading workflow triggers on the
+1. **The assignment is in `tag` submission mode and they just pushed.** In that
+   mode only `submit/*` tags grade, by design, so a plain `git push` does
+   nothing. Students submit with `gh student submit`. Check with
+   `gh teacher assignment list <org> <classroom> --json`, and switch the whole
+   assignment if it was unintended:
+
+   ```sh
+   gh teacher assignment submission-mode <org> <classroom> <slug> every-push
+   ```
+
+   That retrofits existing student repos, not just new ones.
+2. They pushed to a non-default branch. The grading workflow triggers on the
    default branch.
-2. They accepted before you added the `tests` block, so their repo has the shim
+3. They accepted before you added the `tests` block, so their repo has the shim
    but nothing to grade. Have them push again; the runner fetches config at
    grade time, so a new push picks it up without re-accepting.
-3. Actions are disabled org-wide. `gh teacher init` enables them; re-run it.
+4. Actions are disabled org-wide. `gh teacher init` enables them; re-run it.
 
 ---
 

@@ -125,6 +125,20 @@ gh teacher assignment test list <org> <classroom> <slug> --json   # full specs
 gh teacher assignment test remove <org> <classroom> <slug> <name>
 ```
 
+### Setting the whole block at once
+
+Adding tests one at a time is fine for two or three. For a suite you keep under
+version control, `--tests` takes a JSON file (or `-` for stdin) holding a bare
+array of specs and sets the block in one shot:
+
+```sh
+gh teacher assignment add <org> <classroom> <slug> --name "..." --tests tests.json
+gh teacher assignment test list <org> <classroom> <slug> --json > tests.json   # round-trips
+```
+
+Handy when you want the test definitions reviewed in a pull request rather than
+typed at a terminal. Mutually exclusive with a per-assignment `autograder.py`.
+
 ---
 
 ## A worked set
