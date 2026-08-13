@@ -11,6 +11,20 @@ the autograder and the CI both depend on it.
 > way it is. They are written for whoever adapts this next. Students can ignore
 > them, and you can strip them once your own version settles.
 
+## Start here
+
+**Never set up an autograder before?** → **[docs/getting-started.md](docs/getting-started.md)** —
+zero to a verified working assignment, no prior experience assumed.
+
+| Guide | For |
+|---|---|
+| [Getting started](docs/getting-started.md) | First-time setup, end to end |
+| [Writing tests](docs/writing-tests.md) | Test types, weighting, traps |
+| [Troubleshooting](docs/troubleshooting.md) | Symptom → diagnosis → fix |
+
+The rest of this README is about **this repository** — its layout, its CI, and
+what to change when you make it your own.
+
 ## Layout
 
 | Path | What goes here |
