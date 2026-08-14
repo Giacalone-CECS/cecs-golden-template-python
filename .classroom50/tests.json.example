@@ -1,0 +1,38 @@
+{
+  "_comment": [
+    "INERT BY DESIGN. Rename this file to .classroom50/tests.json to activate it.",
+    "",
+    "This is a PORTABLE grading spec: it lets the tests that score this",
+    "assignment live in the student repo instead of only in the teacher's",
+    "classroom50 config repo. It does nothing until (a) you rename it and",
+    "(b) the classroom installs the portable autograder for this assignment.",
+    "",
+    "SECURITY: anyone who can push to this repo can edit this file, including",
+    "the student being graded. Results graded from here are stamped",
+    "tests_source=student-repo and trusted=false in the gradebook. Read",
+    "docs/writing-tests.md, section 'Portable specs', before enabling it on",
+    "anything that counts toward a grade.",
+    "",
+    "The keys below mirror the classroom `tests` block exactly, so a spec can",
+    "move in either direction without translation."
+  ],
+
+  "schema": "classroom50/tests/v1",
+
+  "tests": [
+    {
+      "name": "module imports",
+      "type": "run",
+      "run": "python3 -c \"import src.stats\"",
+      "points": 1
+    },
+    {
+      "name": "pytest suite",
+      "type": "python",
+      "setup": "python3 -m pip install --quiet -r requirements.txt",
+      "run": "python3 -m pytest -q tests/test_stats.py",
+      "timeout": 120,
+      "points": 12
+    }
+  ]
+}
