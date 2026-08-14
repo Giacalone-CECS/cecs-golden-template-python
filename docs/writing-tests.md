@@ -205,6 +205,120 @@ real teaching decision, not just a technical one.
 
 ---
 
+## Portable specs — letting the tests live in the student repo
+
+By default the grading spec lives in your `classroom50` config repo and nowhere
+else. Students receive the template, but not the thing that scores it. That is
+deliberate, and `runner.py` says why in one line:
+
+> The specs are DATA, never code: `run`/`setup` strings are teacher-authored
+> shell ... and students can't edit `assignments.json`.
+
+**The misconception worth naming:** that a `tests` block committed to the
+template will be used. It won't. C50 reads the spec from the config repo, so a
+CI file in the assignment repo is decoration as far as the gradebook is
+concerned. This surprises anyone arriving from GitHub Classroom, where
+`.github/classroom/autograding.json` shipped inside the student repo.
+
+The cost of the default is portability. An assignment repo is not
+self-contained: you cannot hand it to a colleague, run it outside the
+classroom, or lift it into another org without re-authoring the spec through
+the UI or CLI.
+
+If that tradeoff is wrong for your course, you can invert it.
+
+### How to turn it on
+
+Install the portable autograder at
+`<classroom>/autograders/<slug>/autograder.py` in your config repo, then rename
+this template's `.classroom50/tests.json.example` to `.classroom50/tests.json`.
+The file ships inert on purpose, so renaming it is the opt-in.
+
+It runs in one of three modes, set at the top of the autograder:
+
+| Mode | Behavior |
+|---|---|
+| `off` | Never reads the student spec. Stock C50. |
+| `fallback` | Student spec is used *only* where the classroom has none. **Default.** |
+| `prefer` | Student spec wins whenever it is present. |
+
+`fallback` is the default because it is the only mode that cannot change a
+grade you already configured. It fills gaps; it never overrides.
+
+### What you are giving up
+
+> [!CAUTION]
+> **In `prefer` mode, a student can edit the file that grades them.** Anyone
+> who can push to the assignment repo can rewrite the point values, delete the
+> failing case, or replace the command with `true`.
+
+Be precise about which part of that is new, because the scary-sounding half
+isn't the real one:
+
+| | |
+|---|---|
+| **Not new** | Arbitrary code execution in CI. The student's code already runs, because that is what grading *is*. |
+| **New** | The student controls which commands run and what score comes back. |
+| **Blast radius** | Their own submission. The workflow token is scoped to their own repo. |
+
+So this is score forgery, not lateral movement. A student can award themselves
+full marks. They cannot reach another student's repo, your config repo, or your
+service token.
+
+> [!WARNING]
+> Do not enable `prefer` on anything that counts toward a grade unless you
+> intend to verify the results by hand. `fallback` on ungraded practice work is
+> a much easier thing to defend.
+
+### How you catch it
+
+Prevention isn't available here, so the autograder does attribution instead.
+Every result records where its spec came from:
+
+```json
+{
+  "score": 5,
+  "max-score": 10,
+  "tests_source": "student-repo",
+  "trusted": false,
+  "tests_origin": ".classroom50/tests.json"
+}
+```
+
+Those fields survive collection and land in `scores.json`, so a self-graded
+submission is queryable in the gradebook rather than buried in a CI log nobody
+opens three weeks later:
+
+```
+18:12:22   13/13  source=(absent)      trusted=(absent)
+18:55:41    5/10  source=student-repo  trusted=false   <-- untrusted
+```
+
+> [!NOTE]
+> Results graded the stock way carry no `trusted` field at all, which is why
+> the older rows read `(absent)`. Filter on `trusted != false`, not
+> `trusted == true`, or you will drop every normally-graded submission.
+
+Two more levers if you want them. `UNTRUSTED_MAX` caps what a self-graded
+submission can score, which turns a 100-point self-grant into whatever ceiling
+you set. And `PORTABLE_PATHS` controls which filenames count, so you can accept
+a GitHub Classroom layout during a migration and drop it afterward.
+
+### What it refuses
+
+The loader treats a student spec as hostile, because it is:
+
+- A symlink pointing outside the checkout is refused, not followed.
+- A malformed spec is reported as an **error**, never scored as a zero. A zero
+  is a claim about the student's work; a broken config is a claim about yours,
+  and conflating them buries the bug.
+- Duplicate test names are rejected. Names are row identities in the result,
+  so duplicates make the gradebook ambiguous about which row a score belongs to.
+- A spec with the wrong `schema` is rejected by name, which is what a
+  GitHub Classroom `autograding.json` will hit if you rename it without
+  converting it.
+---
+
 ## Before you hand it to students
 
 > [!CAUTION]

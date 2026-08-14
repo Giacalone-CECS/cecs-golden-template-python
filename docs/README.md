@@ -9,7 +9,7 @@ the surrounding system.
 | Guide | For | Time |
 |---|---|---|
 | **[Getting started](getting-started.md)** | Never set up an autograder. Zero to a verified, working assignment. | ~45 min first time |
-| **[Writing tests](writing-tests.md)** | Expressing "is this correct?" as a `tests` block. Test types, weighting, traps. | ~15 min |
+| **[Writing tests](writing-tests.md)** | Expressing "is this correct?" as a `tests` block. Test types, weighting, traps, and the opt-in portable spec. | ~20 min |
 | **[Troubleshooting](troubleshooting.md)** | Something is broken. Symptom → diagnosis → fix. | as needed |
 | **[Governance](governance.md)** | Adapting the template for your course. The recommended baseline is advisory; nothing here is mandatory. | ~10 min |
 | **[Performance sanity check](../perf/README.md)** | Load testing a service-building assignment. Opt-in. | ~10 min |
