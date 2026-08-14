@@ -319,6 +319,91 @@ The loader treats a student spec as hostile, because it is:
   converting it.
 ---
 
+## Protected files, and what C50 does not have
+
+GitHub Classroom could mark files unmodifiable and tell you when a student
+edited one. **Classroom 50 has no equivalent.** The field that looks like it,
+`allowed_files`, does something close to the opposite.
+
+`allowed_files` is an *allowlist* of paths that belong to the submission,
+written as ordered `.gitignore`-style patterns:
+
+```sh
+gh teacher assignment add <org> <classroom> <slug> \
+    --allowed-files '*' --allowed-files '!hello.py'   # only hello.py counts
+```
+
+On a violation it **deletes the file before grading**. It does not report
+anything. Its own schema is explicit about the ceiling:
+
+> ... fails open on git/resource failure, so it is a grading-scope/hygiene
+> tool, not a secret-hiding boundary.
+
+**The misconception worth naming:** that `allowed_files` protects your test
+suite. It does not. It keeps stray files out of the grading scope, and it will
+never tell you a student rewrote `tests/`.
+
+### Detecting edits yourself
+
+The piece you need already exists. The accept commit creates
+`.classroom50.yaml`, so the commit that *added* that file is the student's
+baseline, and everything between it and `HEAD` is their own work. C50 resolves
+the baseline this way itself, keyed on the file rather than the commit subject,
+because a subject match is spoofable by reusing the wording.
+
+The portable autograder shipped with this template does the rest. Set the paths
+you care about:
+
+```python
+PROTECTED_PATHS: tuple[str, ...] = ("tests/**", "requirements.txt")
+PROTECTED_POLICY = "report"   # or "zero"
+```
+
+Patterns accept `dir/`, `dir/**`, globs, and exact paths. A violation is
+recorded in the result and reaches the gradebook alongside the score:
+
+```json
+{
+  "score": 13,
+  "max-score": 13,
+  "protected_ok": false,
+  "protected_baseline": "42a12474a48c...",
+  "protected_violations": ["tests/test_stats.py"],
+  "protected_policy": "report"
+}
+```
+
+That example is the case the feature exists for: **full marks, and the reason
+for full marks is the thing you needed to know about.**
+
+`report` is the default on purpose. An edited test file is sometimes a student
+debugging rather than a student cheating, and that is a judgment you should make
+with the evidence in front of you. Use `zero` only when your syllabus says so.
+
+> [!NOTE]
+> `protected_ok` is **absent** when the check did not run, which is deliberately
+> different from ran-and-found-nothing. Clean and never-checked are not the same
+> claim, so filter accordingly.
+
+### What it cannot do
+
+> [!WARNING]
+> This is **detection, not prevention**, the same as GitHub Classroom's was.
+> Two specific gaps, worth knowing now rather than discovering later:
+>
+> - A student can edit a protected file and revert it in a later commit. A
+>   `baseline..HEAD` diff will not show it.
+> - The baseline itself is only pinned by the ruleset that blocks force-pushes
+>   to the default branch. `runner.py` says so directly: on a plan that rejects
+>   org rulesets, "that protection silently doesn't apply," making this "a
+>   robustness win over subject-matching, not a guarantee."
+
+Everything fails open. No baseline, no git, or any git error skips the check
+rather than recording a violation. That asymmetry is deliberate: the
+consequence of a false positive lands on a student, so uncertainty must never
+read as guilt.
+---
+
 ## Before you hand it to students
 
 > [!CAUTION]
